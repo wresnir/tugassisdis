@@ -2,10 +2,10 @@ from django.urls import path, include
 from . import views
 from rest_framework import routers
 
-router = routers.DefaultRouter()
-router.register('repos', views.RepoView, base_name='Repo')
-
 urlpatterns = [
-    path('', include(router.urls)),
-    path('list', views.quorumView),
+    path('ping', views.pingView),
+    path('register', views.registerView),
+    path('getSaldo', views.getSaldoView),
+    path('getTotalSaldo', views.getTotalSaldoView),
+    path('transfer', views.transferView),
 ]
