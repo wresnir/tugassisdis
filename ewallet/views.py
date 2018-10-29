@@ -1,6 +1,8 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.decorators import action, api_view
+from rest_framework.response import Response
 from .models import Repo
 from .models import User
 from .serializers import RepoSerializer
@@ -33,21 +35,24 @@ def quorum():
     return out
 
 @csrf_exempt
+@api_view(['POST', ])
 def pingView(request):
     res = {}
     res['pingReturn'] = 1
-    return json.dumps(res)
+    return Response(res)
 
 @csrf_exempt
+@api_view(['POST', ])
 def registerView(request):
     req = json.loads(request.body)
     queryset = User(user_id=req['user_id'], nama=req['nama'], nilai_saldo=0)
     queryset.save()
     res = {}
     res['registerReturn'] = 1
-    return json.dumps(res)
+    return Response(res)
 
 @csrf_exempt
+@api_view(['POST', ])
 def getSaldoView(request):
     req = json.loads(request.body)
     res = {}
@@ -62,6 +67,7 @@ def getSaldoView(request):
     return json.dumps(res)
 
 @csrf_exempt
+@api_view(['POST', ])
 def getTotalSaldoView(request):
     req = json.loads(request.body)
     res = {}
@@ -76,6 +82,7 @@ def getTotalSaldoView(request):
     return json.dumps(res)
 
 @csrf_exempt
+@api_view(['POST', ])
 def transferView(request):
     saldo_raw = json.loads(getSaldoView(request))
     saldo = saldo_raw['saldo']
