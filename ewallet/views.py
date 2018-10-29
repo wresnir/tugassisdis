@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Repo
@@ -18,7 +19,7 @@ listTest = [
     {"ip": "172.22.0.203","npm": "1406543896"}
 ]
 
-
+@csrf_exempt
 def quorum():
     response = requests.get('http://172.22.0.222/lapors/list.php')
     count = 0
@@ -31,11 +32,13 @@ def quorum():
     out = (count/len(response))*100
     return out
 
+@csrf_exempt
 def pingView(request):
     res = {}
     res['pingReturn'] = 1
     return json.dumps(res)
 
+@csrf_exempt
 def registerView(request):
     req = json.loads(request.body)
     queryset = User(user_id=req['user_id'], nama=req['nama'], nilai_saldo=0)
@@ -44,6 +47,7 @@ def registerView(request):
     res['registerReturn'] = 1
     return json.dumps(res)
 
+@csrf_exempt
 def getSaldoView(request):
     req = json.loads(request.body)
     res = {}
@@ -57,6 +61,7 @@ def getSaldoView(request):
         res['saldo'] = -4
     return json.dumps(res)
 
+@csrf_exempt
 def getTotalSaldoView(request):
     req = json.loads(request.body)
     res = {}
@@ -70,6 +75,7 @@ def getTotalSaldoView(request):
         res['saldo'] = -4
     return json.dumps(res)
 
+@csrf_exempt
 def transferView(request):
     saldo_raw = json.loads(getSaldoView(request))
     saldo = saldo_raw['saldo']
