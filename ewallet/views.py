@@ -13,5 +13,4 @@ def quorumView(request):
     response = requests.get('http://172.22.0.222/lapors/list.php')
     data_list = response.json()
     count = 0
-    print(data_list)
     return data_list
