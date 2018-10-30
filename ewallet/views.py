@@ -80,10 +80,9 @@ def getSaldoView(request):
     try:
         #Get saldo process
         queryset = User.objects.get(user_id=req['user_id'])
-        if not queryset:
-            res['saldo'] = -1
-        else:
-            res['saldo'] = queryset.nilai_saldo
+        res['saldo'] = queryset.nilai_saldo
+    except queryset.model.DoesNotExist:
+        res['saldo'] = -1
     except Exception as e:
         #If get saldo process failed
         print(e)
