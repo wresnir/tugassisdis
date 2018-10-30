@@ -15,21 +15,22 @@ class RepoView(viewsets.ModelViewSet):
     serializer_class = RepoSerializer
 
 listTest = [
-    {"ip": "172.22.0.208","npm": "1406622856"},
-    {"ip": "172.22.0.206","npm": "1406572340"},
-    {"ip": "172.22.0.205","npm": "1406571123"},
-    {"ip": "172.22.0.203","npm": "1406543896"}
+    {"ip": "172.22.0.208","npm": "1406622856"},#rizqi
+    {"ip": "172.22.0.206","npm": "1406572340"},#papeng
+    {"ip": "172.22.0.205","npm": "1406571123"},#fakhri
+    {"ip": "172.22.0.203","npm": "1406543896"},#wresni
+    {"ip": "172.22.0.207","npm": "1406578205"} #irfan
 ]
 
 @csrf_exempt
 def quorum():
-    response = requests.get('http://172.22.0.222/lapors/list.php')
+    response = requests.get('http://172.22.0.222/lapors/list.php').json()
     count = 0
     for domain in listTest:
         raw = json.loads(domain)
         ip = raw['ip']
         try:
-            raw_ping = requests.post('http://'+ip+'/ewallet/ping').json()
+            raw_ping = requests.post('http://'+ip+':8000/ewallet/ping').json()
             if(raw_ping['pingReturn'] == 1):
                 count += 1
         except:
@@ -86,20 +87,47 @@ def getSaldoView(request):
         res['saldo'] = -4
     return Response(res)
 
+def totalSaldoExt(user_id):
+    response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    out = 0
+    for branch in response:
+        if branch['npm'] == user_id:
+            post_param = {}
+            post_param['user_id'] = user_id
+            req_post = requests.get('http://'+branch['ip']+':8000/ewallet/getTotalSaldo', post_param).json()
+            out = req_post
+    return out
+
+def totalSaldoIn(user_id):
+    response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    out = 0
+    for branch in response:
+        post_param = {}
+        post_param['user_id'] = user_id
+        req_post = requests.get('http://'+branch['ip']+':8000/ewallet/getSaldo', post_param).json()
+        if req_post['saldo'] < 0:
+            out += 0
+        else:
+            out += req_post['saldo']
+    return out
+
 @csrf_exempt
 @api_view(['POST', ])
 def getTotalSaldoView(request):
     req = json.loads(request.body)
     res = {}
+    #Quorum check
     if quorum() < 1:
         res['saldo'] = -2
         return Response(res)
     try:
         queryset = User.objects.get(user_id=req['user_id'])[0]
-        # if not queryset:
-        #     # TODO - implement track and call to other branch
-        # else:
-        #     # TODO - Implement sum all balance from all branch
+        if not queryset:
+            # TODO - implement track and call to other branch
+            res['saldo'] = totalSaldoExt(req['user_id'])
+        else:
+            # TODO - Implement sum all balance from all branch
+            res['saldo'] = totalSaldoIn(req['user_id'])
     except:
         res['saldo'] = -4
     return Response(res)
@@ -107,10 +135,14 @@ def getTotalSaldoView(request):
 @csrf_exempt
 @api_view(['POST', ])
 def transferView(request):
-    saldo_raw = json.loads(getSaldoView(request))
-    saldo = saldo_raw['saldo']
     req = json.loads(request.body)
     res = {}
+    #Quorum check
+    if quorum() <= 0.5:
+        res['saldo'] = -2
+        return Response(res)
+    saldo_raw = json.loads(getSaldoView(request))
+    saldo = saldo_raw['saldo']
     if saldo != -1:
         if req['nilai'] > 1000000000:
             res['transferReturn'] = -5
