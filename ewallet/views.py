@@ -26,22 +26,21 @@ def quorum():
             raw_ping = requests.post('http://'+domain['ip']+':8000/ewallet/ping').json()
             if(raw_ping['pingReturn'] == 1):
                 count += 1
-        except Exception as e:
-            print(e)   
-            count = count
+        except:
+            pass
     out = count/len(response)
     return 1
 
 @csrf_exempt
-@api_view(['POST', ])
 def pingView(request):
-    res = {}
-    res['pingReturn'] = 1
-    return Response(res)
+    if request.method == 'POST':
+        return Response({"pingReturn":-99})
+    return Response({"pingReturn":1})
 
 @csrf_exempt
-@api_view(['POST', ])
 def registerView(request):
+    if request.method == 'POST':
+        return Response({"registerReturn":-99})
     try:
         req = json.loads(request.body)
     except Exception as e:
@@ -68,6 +67,8 @@ def registerView(request):
 @csrf_exempt
 @api_view(['POST', ])
 def getSaldoView(request):
+    if request.method == 'POST':
+        return Response({"saldo":-99})
     try:
         req = json.loads(request.body)
     except Exception as e:
@@ -116,12 +117,12 @@ def totalSaldoIn(user_id):
     return out
 
 @csrf_exempt
-@api_view(['POST', ])
 def getTotalSaldoView(request):
+    if request.method == 'POST':
+        return Response({"saldo":-99})
     try:
         req = json.loads(request.body)
-    except Exception as e:
-        print(e)
+    except:
         req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
@@ -142,8 +143,9 @@ def getTotalSaldoView(request):
     return Response(res)
 
 @csrf_exempt
-@api_view(['POST', ])
 def transferView(request):
+    if request.method == 'POST':
+        return Response({"transferReturn":-99})
     try:
         req = json.loads(request.body)
     except Exception as e:
