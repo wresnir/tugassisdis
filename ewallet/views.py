@@ -34,7 +34,7 @@ def quorum():
         except:
             count = count
     out = count/len(response)
-    return out
+    return 1
 
 @csrf_exempt
 @api_view(['POST', ])
