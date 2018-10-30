@@ -48,7 +48,10 @@ def pingView(request):
 @csrf_exempt
 @api_view(['POST', ])
 def registerView(request):
-    req = json.loads(request.body)
+    try:
+        req = json.loads(request.body)
+    except:
+        req = json.loads(Bytes.encode(request.body))
     res = {}
     #Quorum check
     if quorum() <= 0.5:
