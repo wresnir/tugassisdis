@@ -70,7 +70,10 @@ def registerView(request):
 @csrf_exempt
 @api_view(['POST', ])
 def getSaldoView(request):
-    req = json.loads(request.body)
+    try:
+        req = json.loads(request.body)
+    except:
+        req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
     if quorum() <= 0.5:
@@ -115,7 +118,10 @@ def totalSaldoIn(user_id):
 @csrf_exempt
 @api_view(['POST', ])
 def getTotalSaldoView(request):
-    req = json.loads(request.body)
+    try:
+        req = json.loads(request.body)
+    except:
+        req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
     if quorum() < 1:
@@ -136,7 +142,10 @@ def getTotalSaldoView(request):
 @csrf_exempt
 @api_view(['POST', ])
 def transferView(request):
-    req = json.loads(request.body)
+    try:
+        req = json.loads(request.body)
+    except:
+        req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
     if quorum() <= 0.5:
