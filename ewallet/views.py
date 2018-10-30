@@ -26,11 +26,9 @@ listTest = [
 def quorum():
     response = requests.get('http://172.22.0.222/lapors/list.php').json()
     count = 0
-    for domain in listTest:
-        raw = json.loads(domain)
-        ip = raw['ip']
+    for domain in response:
         try:
-            raw_ping = requests.post('http://'+ip+':8000/ewallet/ping').json()
+            raw_ping = requests.post('http://'+domain['ip']+':8000/ewallet/ping').json()
             if(raw_ping['pingReturn'] == 1):
                 count += 1
         except:
