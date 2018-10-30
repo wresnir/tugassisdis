@@ -75,7 +75,7 @@ def getSaldoView(request):
         return Response(res)
     try:
         #Get saldo process
-        queryset = User.objects.get(user_id=req['user_id'])[0]
+        queryset = User.objects.get(user_id=req['user_id'])
         if not queryset:
             res['saldo'] = -1
         else:
