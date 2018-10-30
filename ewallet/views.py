@@ -51,7 +51,7 @@ def registerView(request):
     try:
         req = json.loads(request.body)
     except:
-        req = json.loads(Bytes.encode(request.body))
+        req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
     if quorum() <= 0.5:
