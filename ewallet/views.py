@@ -28,10 +28,13 @@ def quorum():
     for domain in listTest:
         raw = json.loads(domain)
         ip = raw['ip']
-        pingReturn = requests.get('http://'+ip+'/ewallet/ping')
-        if(pingReturn == 1):
-            count += 1
-    out = (count/len(response))*100
+        try:
+            raw_ping = requests.post('http://'+ip+'/ewallet/ping').json()
+            if(raw_ping['pingReturn'] == 1):
+                count += 1
+        except:
+            count = count
+    out = count/len(response)
     return out
 
 @csrf_exempt
@@ -45,32 +48,52 @@ def pingView(request):
 @api_view(['POST', ])
 def registerView(request):
     req = json.loads(request.body)
-    queryset = User(user_id=req['user_id'], nama=req['nama'], nilai_saldo=0)
-    queryset.save()
     res = {}
-    res['registerReturn'] = 1
-    return Response(res)
+    #Quorum check
+    if quorum() <= 0.5:
+        res['registerReturn'] = -2
+        return Response(res)
+    try:
+        #Register process
+        queryset = User(user_id=req['user_id'], nama=req['nama'], nilai_saldo=0)
+        queryset.save()
+        res['registerReturn'] = 1
+        return Response(res)
+    except:
+        #If register process failed
+        res['registerReturn'] = -4
+        return Response(res)
+    
 
 @csrf_exempt
 @api_view(['POST', ])
 def getSaldoView(request):
     req = json.loads(request.body)
     res = {}
+    #Quorum check
+    if quorum() <= 0.5:
+        res['saldo'] = -2
+        return Response(res)
     try:
+        #Get saldo process
         queryset = User.objects.get(user_id=req['user_id'])[0]
         if not queryset:
             res['saldo'] = -1
         else:
             res['saldo'] = queryset.values('nilai_saldo')
     except:
+        #If get saldo process failed
         res['saldo'] = -4
-    return json.dumps(res)
+    return Response(res)
 
 @csrf_exempt
 @api_view(['POST', ])
 def getTotalSaldoView(request):
     req = json.loads(request.body)
     res = {}
+    if quorum() < 1:
+        res['saldo'] = -2
+        return Response(res)
     try:
         queryset = User.objects.get(user_id=req['user_id'])[0]
         # if not queryset:
@@ -79,7 +102,7 @@ def getTotalSaldoView(request):
         #     # TODO - Implement sum all balance from all branch
     except:
         res['saldo'] = -4
-    return json.dumps(res)
+    return Response(res)
 
 @csrf_exempt
 @api_view(['POST', ])
@@ -95,4 +118,4 @@ def transferView(request):
             queryset = User.objects.get(user_id=req['user_id'])
     else:
         res['transferReturn'] = -1
-    return json.dumps(res)
+    return Response(res)
