@@ -3,17 +3,11 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
-from .models import Repo
 from .models import User
-from .serializers import RepoSerializer
 import requests
 import json
 
 # Create your views here.
-class RepoView(viewsets.ModelViewSet):
-    queryset = Repo.objects.all()
-    serializer_class = RepoSerializer
-
 listTest = [
     {"ip": "172.22.0.208","npm": "1406622856"},#rizqi
     {"ip": "172.22.0.206","npm": "1406572340"},#papeng
