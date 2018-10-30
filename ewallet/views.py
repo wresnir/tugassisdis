@@ -25,7 +25,8 @@ def quorum():
             raw_ping = requests.post('http://'+domain['ip']+':8000/ewallet/ping').json()
             if(raw_ping['pingReturn'] == 1):
                 count += 1
-        except:
+        except Exception as e:
+            print(e)   
             count = count
     out = count/len(response)
     return 1
@@ -42,7 +43,8 @@ def pingView(request):
 def registerView(request):
     try:
         req = json.loads(request.body)
-    except:
+    except Exception as e:
+        print(e)
         req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
@@ -55,7 +57,8 @@ def registerView(request):
         queryset.save()
         res['registerReturn'] = 1
         return Response(res)
-    except:
+    except Exception as e:
+        print(e)
         #If register process failed
         res['registerReturn'] = -4
         return Response(res)
@@ -66,7 +69,8 @@ def registerView(request):
 def getSaldoView(request):
     try:
         req = json.loads(request.body)
-    except:
+    except Exception as e:
+        print(e)
         req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
@@ -79,7 +83,7 @@ def getSaldoView(request):
         if not queryset:
             res['saldo'] = -1
         else:
-            res['saldo'] = queryset.values('nilai_saldo')
+            res['saldo'] = queryset.nilai_saldo
     except Exception as e:
         #If get saldo process failed
         print(e)
@@ -115,7 +119,8 @@ def totalSaldoIn(user_id):
 def getTotalSaldoView(request):
     try:
         req = json.loads(request.body)
-    except:
+    except Exception as e:
+        print(e)
         req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
@@ -123,14 +128,15 @@ def getTotalSaldoView(request):
         res['saldo'] = -2
         return Response(res)
     try:
-        queryset = User.objects.get(user_id=req['user_id'])[0]
+        queryset = User.objects.get(user_id=req['user_id'])
         if not queryset:
             # TODO - implement track and call to other branch
             res['saldo'] = totalSaldoExt(req['user_id'])
         else:
             # TODO - Implement sum all balance from all branch
             res['saldo'] = totalSaldoIn(req['user_id'])
-    except:
+    except Exception as e:
+        print(e)
         res['saldo'] = -4
     return Response(res)
 
@@ -139,7 +145,8 @@ def getTotalSaldoView(request):
 def transferView(request):
     try:
         req = json.loads(request.body)
-    except:
+    except Exception as e:
+        print(e)
         req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
