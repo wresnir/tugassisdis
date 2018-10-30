@@ -1,5 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
@@ -81,7 +82,8 @@ def getSaldoView(request):
         #Get saldo process
         queryset = User.objects.get(user_id=req['user_id'])
         res['saldo'] = queryset.nilai_saldo
-    except queryset.model.DoesNotExist:
+    except ObjectDoesNotExist as e:
+        print(e)
         res['saldo'] = -1
     except Exception as e:
         #If get saldo process failed
