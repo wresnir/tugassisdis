@@ -80,8 +80,9 @@ def getSaldoView(request):
             res['saldo'] = -1
         else:
             res['saldo'] = queryset.values('nilai_saldo')
-    except:
+    except Exception as e:
         #If get saldo process failed
+        print(e)
         res['saldo'] = -4
     return Response(res)
 
