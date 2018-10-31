@@ -161,7 +161,10 @@ def getTotalSaldoView(request):
         queryset = User.objects.get(user_id=req['user_id'])
         res['saldo'] = totalSaldoIn(req['user_id'])
     except ObjectDoesNotExist as e:
-        res['saldo'] = totalSaldoExt(req['user_id'])
+        if req['user_id'] == THIS_USER:
+            res['saldo'] = USER_NOT_EXIST
+        else:
+            res['saldo'] = totalSaldoExt(req['user_id'])
     except Exception as e:
         print(e)
         res['saldo'] = DATABASE_FAILED
