@@ -96,7 +96,10 @@ def registerView(request):
 @csrf_exempt
 @api_view(['POST', ])
 def getSaldoView(request):
-    req = json.loads(bytes.decode(request.body))
+    try:
+        req = json.loads(bytes.decode(request.body))
+    except:
+        req = json.loads(request.body)
     res = {}
     #Quorum check
     if quorum() <= 0.5:
