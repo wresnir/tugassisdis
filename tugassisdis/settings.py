@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'tny4n-48+5vk45oc3+4rg%n$i%d7!4$(%o1k*a!vs%m^qg+^jf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['172.22.0.203', '127.0.0.1', 'localhost', 'host1406543896.sisdis.infralabs.cs.ui.ac.id']
 
