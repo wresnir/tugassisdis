@@ -120,13 +120,15 @@ def getSaldoView(request):
 def totalSaldoExt(user_id):
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
     response = listTest
+    post_param = {}
+    post_param['user_id'] = user_id
+    post_param = json.dumps(post_param)
     out = 0
     for branch in response:
         if branch['npm'] == user_id:
-            post_param = {}
-            post_param['user_id'] = user_id
             req_post = requests.post('http://'+branch['ip']+'/ewallet/getTotalSaldo', post_param).json()
             out = req_post['saldo']
+            break
     return out
 
 def totalSaldoIn(user_id):
@@ -135,8 +137,7 @@ def totalSaldoIn(user_id):
     post_param = {}
     post_param['user_id'] = user_id
     post_param = json.dumps(post_param)
-    balance = requests.post('http://'+THIS_IP+'/ewallet/getSaldo', post_param).json()
-    out = balance['saldo']
+    out = 0
     for branch in response:
         req_post = requests.post('http://'+branch['ip']+'/ewallet/getSaldo', post_param).json()
         if req_post['saldo'] < 0:
