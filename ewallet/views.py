@@ -30,24 +30,25 @@ THIS_USER = "1406543896"
 
 listTest = [
     {"ip": "172.22.0.203","npm": "1406543896"},#wresni
+    {"ip": "172.22.0.207","npm": "1406578205"} #irfan
 ]
 
 # Create your views here.
 @csrf_exempt
 def quorum():
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
-    # response = listTest
-    # count = 0
-    # for domain in response:
-    #     try:
-    #         # raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
-    #         raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
-    #         if(raw_ping['pingReturn'] == SUCCESS):
-    #             count += 1
-    #     except:
-    #         pass
-    # out = count/len(response)
-    return 1
+    response = listTest
+    count = 0
+    for domain in response:
+        try:
+            # raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
+            raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
+            if(raw_ping['pingReturn'] == SUCCESS):
+                count += 1
+        except:
+            pass
+    out = count/len(response)
+    return out
 
 @csrf_exempt
 @api_view(['POST', ])
