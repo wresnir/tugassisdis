@@ -70,7 +70,7 @@ def registerView(request):
         return Response(res)
     try:
         #Register process
-        print("before"
+        print("before")
         queryset = User(user_id=req['user_id'], nama=req['nama'], nilai_saldo=1000000000)
         if req['user_id'] == THIS_USER:
             queryset.nilai_saldo = 1000000000
