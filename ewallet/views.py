@@ -20,21 +20,27 @@ THIS_IP = "172.22.0.203"
 THIS_USER = "1406543896"
 
 # Quorum dummy
+# listTest = [
+#     {"ip": "172.22.0.208","npm": "1406622856"},#rizqi
+#     {"ip": "172.22.0.206","npm": "1406572340"},#papeng
+#     {"ip": "172.22.0.205","npm": "1406571123"},#fakhri
+#     {"ip": "172.22.0.203","npm": "1406543896"},#wresni
+#     {"ip": "172.22.0.207","npm": "1406578205"} #irfan
+# ]
+
 listTest = [
-    {"ip": "172.22.0.208","npm": "1406622856"},#rizqi
-    {"ip": "172.22.0.206","npm": "1406572340"},#papeng
-    {"ip": "172.22.0.205","npm": "1406571123"},#fakhri
     {"ip": "172.22.0.203","npm": "1406543896"},#wresni
-    {"ip": "172.22.0.207","npm": "1406578205"} #irfan
 ]
 
 # Create your views here.
 @csrf_exempt
 def quorum():
-    response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    # response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    response = listTest
     count = 0
     for domain in response:
         try:
+            # raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
             raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
             if(raw_ping['pingReturn'] == SUCCESS):
                 count += 1
