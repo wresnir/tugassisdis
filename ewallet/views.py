@@ -117,7 +117,7 @@ def getSaldoView(request):
         res['saldo'] = DATABASE_FAILED
     return Response(res)
 
-def totalSaldoExt(user_id):
+def totalSaldoExt(user_id, request):
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
     response = listTest
     out = 0
@@ -129,7 +129,7 @@ def totalSaldoExt(user_id):
             out = req_post['saldo']
     return out
 
-def totalSaldoIn(user_id):
+def totalSaldoIn(user_id, request):
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
     response = listTest
     balance = getSaldoView(request).data
@@ -155,9 +155,9 @@ def getTotalSaldoView(request):
         return Response(res)
     try:
         queryset = User.objects.get(user_id=req['user_id'])
-        res['saldo'] = totalSaldoIn(req['user_id'])
+        res['saldo'] = totalSaldoIn(req['user_id'], request)
     except ObjectDoesNotExist as e:
-        res['saldo'] = totalSaldoExt(req['user_id'])
+        res['saldo'] = totalSaldoExt(req['user_id'], request)
     except Exception as e:
         print(e)
         res['saldo'] = DATABASE_FAILED
