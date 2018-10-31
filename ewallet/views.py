@@ -37,8 +37,8 @@ listTest = [
 # Create your views here.
 @csrf_exempt
 def quorum():
-    # response = requests.get('http://172.22.0.222/lapors/list.php').json()
-    response = listTest
+    response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    # response = listTest
     count = 0
     for domain in response:
         try:
@@ -117,8 +117,8 @@ def getSaldoView(request):
     return Response(res)
 
 def totalSaldoExt(user_id):
-    # response = requests.get('http://172.22.0.222/lapors/list.php').json()
-    response = listTest
+    response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    # response = listTest
     post_param = {}
     post_param['user_id'] = user_id
     post_param = json.dumps(post_param)
@@ -131,8 +131,8 @@ def totalSaldoExt(user_id):
     return out
 
 def totalSaldoIn(user_id):
-    # response = requests.get('http://172.22.0.222/lapors/list.php').json()
-    response = listTest
+    response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    # response = listTest
     post_param = {}
     post_param['user_id'] = user_id
     post_param = json.dumps(post_param)
