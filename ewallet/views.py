@@ -109,6 +109,8 @@ def getSaldoView(request):
     except ObjectDoesNotExist as e:
         print(e)
         res['saldo'] = USER_NOT_EXIST
+    except MultiValueDictKeyError as e:
+        res['saldo'] = UNDEFINED
     except Exception as e:
         #If get saldo process failed
         print(e)
