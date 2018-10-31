@@ -96,10 +96,7 @@ def registerView(request):
 @csrf_exempt
 @api_view(['POST', ])
 def getSaldoView(request):
-    try:
-        req = json.loads(bytes.decode(request.body))
-    except:
-        req = json.loads(request.body)
+    req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
     if quorum() <= 0.5:
@@ -137,6 +134,7 @@ def totalSaldoIn(user_id):
     response = listTest
     post_param = {}
     post_param['user_id'] = user_id
+    post_param = json.dumps(post_param)
     balance = requests.post('http://'+THIS_IP+'/ewallet/getSaldo', post_param).json()
     out = balance['saldo']
     for branch in response:
