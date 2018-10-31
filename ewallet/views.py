@@ -96,7 +96,7 @@ def registerView(request):
 @csrf_exempt
 @api_view(['POST', ])
 def getSaldoView(request):
-    req = json.loads(bytes.decode(request._request.body))
+    req = json.loads(bytes.decode(request.body))
     res = {}
     #Quorum check
     if quorum() <= 0.5:
@@ -132,7 +132,7 @@ def totalSaldoExt(user_id, request):
 def totalSaldoIn(user_id, request):
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
     response = listTest
-    balance = getSaldoView(request._request).data
+    balance = requests.post('http://'+user_id+'/ewallet/getSaldo', post_param).json()
     out = balance['saldo']
     for branch in response:
         post_param = {}
@@ -155,9 +155,9 @@ def getTotalSaldoView(request):
         return Response(res)
     try:
         queryset = User.objects.get(user_id=req['user_id'])
-        res['saldo'] = totalSaldoIn(req['user_id'], request)
+        res['saldo'] = totalSaldoIn(req['user_id'])
     except ObjectDoesNotExist as e:
-        res['saldo'] = totalSaldoExt(req['user_id'], request)
+        res['saldo'] = totalSaldoExt(req['user_id'])
     except Exception as e:
         print(e)
         res['saldo'] = DATABASE_FAILED
