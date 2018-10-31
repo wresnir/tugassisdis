@@ -123,7 +123,7 @@ def totalSaldoExt(user_id):
     post_param = {}
     post_param['user_id'] = user_id
     post_param = json.dumps(post_param)
-    out = 0
+    out = -1
     for branch in response:
         if branch['npm'] == user_id:
             req_post = requests.post('http://'+branch['ip']+'/ewallet/getTotalSaldo', post_param).json()
@@ -140,7 +140,10 @@ def totalSaldoIn(user_id):
     out = 0
     for branch in response:
         req_post = requests.post('http://'+branch['ip']+'/ewallet/getSaldo', post_param).json()
-        if req_post['saldo'] < 0:
+        if req_post['saldo'] == DATABASE_FAILED:
+            out = DATABASE_FAILED
+            break
+        elif req_post['saldo'] < 0:
             out += 0
         else:
             out += req_post['saldo']
