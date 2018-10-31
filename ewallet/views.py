@@ -225,6 +225,7 @@ def transferToView(request):
     transfer_param = {}
     transfer_param['user_id'] = req['user_id']
     transfer_param['nilai'] = req['nilai']
+    transfer_param = json.dumps(transfer_param)
     transfer = requests.post('http://'+req['ip']+'/ewallet/getSaldo', transfer_param).json()['transferReturn']
     if transfer == SUCCESS:
         queryset = User.objects.get(user_id=req['user_id'])
