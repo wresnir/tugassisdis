@@ -55,7 +55,7 @@ def quorum():
 def quorumView(request):
     res = {}
     res['quorum'] = quorum()
-    return res
+    return Response(res)
 
 @csrf_exempt
 @api_view(['POST', ])
