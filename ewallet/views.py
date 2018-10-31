@@ -131,7 +131,7 @@ def totalSaldoExt(user_id, request):
 
 def totalSaldoIn(user_id, request):
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
-    print("--"+request)
+    print("--"+str(request))
     response = listTest
     balance = getSaldoView(request._request).data
     out = balance['saldo']
@@ -156,7 +156,7 @@ def getTotalSaldoView(request):
         return Response(res)
     try:
         queryset = User.objects.get(user_id=req['user_id'])
-        print("++"+request)
+        print("++"+str(request))
         res['saldo'] = totalSaldoIn(req['user_id'], request)
     except ObjectDoesNotExist as e:
         res['saldo'] = totalSaldoExt(req['user_id'], request)
