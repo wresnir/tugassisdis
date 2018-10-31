@@ -117,7 +117,7 @@ def getSaldoView(request):
         res['saldo'] = DATABASE_FAILED
     return Response(res)
 
-def totalSaldoExt(user_id, request):
+def totalSaldoExt(user_id):
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
     response = listTest
     out = 0
@@ -129,7 +129,7 @@ def totalSaldoExt(user_id, request):
             out = req_post['saldo']
     return out
 
-def totalSaldoIn(user_id, request):
+def totalSaldoIn(user_id):
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
     response = listTest
     balance = requests.post('http://'+THIS_IP+'/ewallet/getSaldo', post_param).json()
