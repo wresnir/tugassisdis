@@ -9,4 +9,5 @@ urlpatterns = [
     path('getSaldo', views.getSaldoView),
     path('getTotalSaldo', views.getTotalSaldoView),
     path('transfer', views.transferView),
+    path('transferTo', views.transferToView),
 ]
