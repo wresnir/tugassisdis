@@ -184,6 +184,7 @@ def transferView(request):
     except:
         res['saldo'] = UNDEFINED
         return Response(res)
+
     try:
         queryset = User.objects.get(user_id=req['user_id'])
         queryset.nilai_saldo += req['nilai']
@@ -204,7 +205,7 @@ def transferToView(request):
     post_param = {}
     post_param['user_id'] = req['user_id']
     post_param = json.dumps(post_param)
-    balance = requests.post('http://'+req['ip']+'/ewallet/getSaldo', post_param).json()
+    balance = requests.post('http://'+req['ip']+'/ewallet/getSaldo', post_param).json()['saldo']
     if balance < 0:
         res['status'] = balance['saldo']
         return Response(res)
@@ -213,13 +214,12 @@ def transferToView(request):
         return Response(res)
 
     # Check target
-    target_param = {}
-    target_param['user_id'] = req['user_id']
-    target = request.post('http://'+branch['ip']+'/ewallet/getSaldo', target_param).json()['saldo']
+    saldo = request.post('http://'+branch['ip']+'/ewallet/getSaldo', post_param).json()['saldo']
     if saldo < 0:
         register_param = {}
         register_param['user_id'] = req['user_id']
         register_param['nama'] = ""
+        register_param = json.dumps(register_param)
         register_res = request.post('http://'+branch['ip']+'/ewallet/getSaldo', register_param).json()
     
     transfer_param = {}
