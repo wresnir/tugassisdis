@@ -1,6 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.datastructures import MultiValueDictKeyError
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
@@ -83,6 +84,8 @@ def registerView(request):
             queryset.nilai_saldo = 1000000000
         queryset.save()
         res['registerReturn'] = SUCCESS
+    except MultiValueDictKeyError as e:
+        res['registerReturn'] = UNDEFINED
     except Exception as e:
         #If register process failed
         print(e)
