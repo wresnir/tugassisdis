@@ -116,7 +116,8 @@ def getSaldoView(request):
     return Response(res)
 
 def totalSaldoExt(user_id):
-    response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    # response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    response = listTest
     out = 0
     for branch in response:
         if branch['npm'] == user_id:
@@ -127,7 +128,8 @@ def totalSaldoExt(user_id):
     return out
 
 def totalSaldoIn(user_id):
-    response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    # response = requests.get('http://172.22.0.222/lapors/list.php').json()
+    response = listTest
     balance = getSaldo(request).data
     out = balance['saldo']
     for branch in response:
