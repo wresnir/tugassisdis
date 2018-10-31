@@ -156,7 +156,7 @@ def getTotalSaldoView(request):
         return Response(res)
     try:
         queryset = User.objects.get(user_id=req['user_id'])
-        print("++"+str(request._request))
+        print("++"+str(request._request.body))
         res['saldo'] = totalSaldoIn(req['user_id'], request)
     except ObjectDoesNotExist as e:
         res['saldo'] = totalSaldoExt(req['user_id'], request)
