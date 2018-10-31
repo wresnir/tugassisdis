@@ -132,7 +132,7 @@ def totalSaldoExt(user_id):
 def totalSaldoIn(user_id):
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
     response = listTest
-    balance = self.getSaldo(request).data
+    balance = getSaldoView(request).data
     out = balance['saldo']
     for branch in response:
         post_param = {}
@@ -192,7 +192,7 @@ def transferToView(request):
     req = json.loads(bytes.decode(request.body))
     res = {}
     # Check saldo
-    balance = self.getSaldo(request).data
+    balance = getSaldoView(request).data
     if balance < 0:
         res['status'] = balance['saldo']
         return Response(res)
