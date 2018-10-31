@@ -48,7 +48,7 @@ def quorum():
                 count += 1
         except:
             pass
-    print(str(count)+"/"+str(len(response))
+    print(str(count)+"/"+str(len(response)))
     out = count/len(response)
     return out
 
