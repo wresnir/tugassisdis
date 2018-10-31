@@ -177,8 +177,12 @@ def transferView(request):
     if quorum() <= 0.5:
         res['saldo'] = QUORUM_NOT_ENOUGH
         return Response(res)
-    if req['nilai'] < 0 or req['nilai'] > 1000000000:
-        res['saldo'] = VALUE_NOT_VALID
+    try:
+        if req['nilai'] < 0 or req['nilai'] > 1000000000:
+            res['saldo'] = VALUE_NOT_VALID
+            return Response(res)
+    except:
+        res['saldo'] = UNDEFINED
         return Response(res)
     try:
         queryset = User.objects.get(user_id=req['user_id'])
@@ -197,7 +201,10 @@ def transferToView(request):
     req = json.loads(bytes.decode(request.body))
     res = {}
     # Check saldo
-    balance = getSaldoView(request._request).data
+    post_param = {}
+    post_param['user_id'] = req['user_id']
+    post_param = json.dumps(post_param)
+    balance = requests.post('http://'+req['ip']+'/ewallet/getSaldo', post_param).json()
     if balance < 0:
         res['status'] = balance['saldo']
         return Response(res)
