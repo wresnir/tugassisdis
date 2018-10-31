@@ -68,21 +68,19 @@ def registerView(request):
     if quorum() <= 0.5:
         res['registerReturn'] = QUORUM_NOT_ENOUGH
         return Response(res)
-    # try:
+    try:
         #Register process
-        print("before")
         queryset = User(user_id=req['user_id'], nama=req['nama'], nilai_saldo=1000000000)
         if req['user_id'] == THIS_USER:
             queryset.nilai_saldo = 1000000000
         queryset.save()
-        print("after")
+        res['registerReturn'] = SUCCESS
+        return Response(res)
+    except Exception as e:
+        #If register process failed
+        print(e)
         res['registerReturn'] = DATABASE_FAILED
         return Response(res)
-    # except Exception as e:
-    #     #If register process failed
-    #     print(e)
-    #     res['registerReturn'] = DATABASE_FAILED
-    #     return Response(res)
     
 
 @csrf_exempt
