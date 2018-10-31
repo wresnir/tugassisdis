@@ -220,13 +220,13 @@ def transferToView(request):
         register_param['user_id'] = req['user_id']
         register_param['nama'] = ""
         register_param = json.dumps(register_param)
-        register_res = requests.post('http://'+req['ip']+'/ewallet/getSaldo', register_param).json()
+        register_res = requests.post('http://'+req['ip']+'/ewallet/register', register_param).json()
     
     transfer_param = {}
     transfer_param['user_id'] = req['user_id']
     transfer_param['nilai'] = req['nilai']
     transfer_param = json.dumps(transfer_param)
-    transfer = requests.post('http://'+req['ip']+'/ewallet/getSaldo', transfer_param).json()['transferReturn']
+    transfer = requests.post('http://'+req['ip']+'/ewallet/transfer', transfer_param).json()['transferReturn']
     if transfer == SUCCESS:
         queryset = User.objects.get(user_id=req['user_id'])
         queryset.nilai_saldo -= req['nilai']
