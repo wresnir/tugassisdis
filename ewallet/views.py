@@ -41,12 +41,12 @@ def quorum():
     # response = listTest
     count = 0
     for domain in response:
-        try:
-            raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
-            if(raw_ping['pingReturn'] == SUCCESS):
-                count += 1
-        except:
-            pass
+        # try:
+        raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
+        if(raw_ping['pingReturn'] == SUCCESS):
+            count += 1
+        # except:
+        #     pass
     out = count/len(response)
     return out
 
