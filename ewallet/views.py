@@ -35,7 +35,7 @@ listTest = [
 
 # Create your views here.
 @csrf_exempt
-def quorum(request):
+def quorum():
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
     response = listTest
     count = 0
@@ -49,6 +49,13 @@ def quorum(request):
             pass
     out = count/len(response)
     return out
+
+@csrf_exempt
+@api_view(['POST', ])
+def quorumView(request):
+    res = {}
+    res['quorum'] = quorum()
+    return res
 
 @csrf_exempt
 @api_view(['POST', ])
@@ -66,7 +73,7 @@ def registerView(request):
     req = request.data
     res = {}
     #Quorum check
-    if quorum(request) <= 0.5:
+    if quorum() <= 0.5:
         res['registerReturn'] = QUORUM_NOT_ENOUGH
         return Response(res)
     try:
@@ -89,7 +96,7 @@ def getSaldoView(request):
     req = request.data
     res = {}
     #Quorum check
-    if quorum(request) <= 0.5:
+    if quorum() <= 0.5:
         res['saldo'] = QUORUM_NOT_ENOUGH
         return Response(res)
     try:
@@ -136,7 +143,7 @@ def getTotalSaldoView(request):
     req = request.data
     res = {}
     #Quorum check
-    if quorum(request) < 1:
+    if quorum() < 1:
         res['saldo'] = QUORUM_NOT_ENOUGH
         return Response(res)
     try:
@@ -154,7 +161,7 @@ def transferView(request):
     req = request.data
     res = {}
     #Quorum check
-    if quorum(request) <= 0.5:
+    if quorum() <= 0.5:
         res['saldo'] = QUORUM_NOT_ENOUGH
         return Response(res)
     if req['nilai'] < 0 or req['nilai'] > 1000000000:
