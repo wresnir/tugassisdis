@@ -36,18 +36,18 @@ listTest = [
 @csrf_exempt
 def quorum():
     # response = requests.get('http://172.22.0.222/lapors/list.php').json()
-    response = listTest
-    count = 0
-    for domain in response:
-        try:
-            # raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
-            raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
-            if(raw_ping['pingReturn'] == SUCCESS):
-                count += 1
-        except:
-            pass
-    out = count/len(response)
-    return out
+    # response = listTest
+    # count = 0
+    # for domain in response:
+    #     try:
+    #         # raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
+    #         raw_ping = requests.post('http://'+domain['ip']+'/ewallet/ping').json()
+    #         if(raw_ping['pingReturn'] == SUCCESS):
+    #             count += 1
+    #     except:
+    #         pass
+    # out = count/len(response)
+    return 1
 
 @csrf_exempt
 @api_view(['POST', ])
@@ -68,19 +68,18 @@ def registerView(request):
     if quorum() <= 0.5:
         res['registerReturn'] = QUORUM_NOT_ENOUGH
         return Response(res)
-    # try:
+    try:
         #Register process
-        queryset = User(user_id=req['user_id'], nama=req['nama'], nilai_saldo=1000000000)
+        queryset = User(user_id=req['user_id'], nama=req['nama'], nilai_saldo=0)
         if req['user_id'] == THIS_USER:
             queryset.nilai_saldo = 1000000000
         queryset.save()
         res['registerReturn'] = SUCCESS
-        return Response(res)
-    # except Exception as e:
+    except Exception as e:
         #If register process failed
-        # print(e)
-        # res['registerReturn'] = DATABASE_FAILED
-        # return Response(res)
+        print(e)
+        res['registerReturn'] = DATABASE_FAILED
+    return Response(res)
     
 
 @csrf_exempt
