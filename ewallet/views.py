@@ -159,6 +159,7 @@ def getTotalSaldoView(request):
     except ObjectDoesNotExist as e:
         res['saldo'] = totalSaldoExt(req['user_id'])
     except Exception as e:
+        print(e)
         res['saldo'] = DATABASE_FAILED
     return Response(res)
 
